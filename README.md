@@ -8,7 +8,7 @@
     cd <root>/server
     npm install
     ```
-    3. #### start truffle
+    2. #### start truffle
     ```bash
     npm start
     ```
