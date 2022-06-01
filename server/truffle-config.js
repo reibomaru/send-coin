@@ -52,6 +52,11 @@ module.exports = {
       port: 8545,
       url: 'ws://127.0.0.1:8545',
       websockets: true,
+    },
+    ganache: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
     }
     //
     // An additional network, but with some advanced options…

@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "truffle develop",
-    "format": "prettier --write 'contracts/**/*.sol'"
+    "format": "prettier --write 'contracts/**/*.sol'",
+    "start-ganache": "cd dev/ganache-ui && npm run dev",
+    "deploy-ganache": "truffle migrate --network ganache"
   },
   "author": "",
   "license": "ISC",
