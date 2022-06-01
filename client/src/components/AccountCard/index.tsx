@@ -11,12 +11,20 @@ const AccountCard = ({ account }: props) => {
     to: "",
     amount: 0,
   });
-  const { contract } = useWeb3();
+  const [eth, setEth] = useState("");
+  const { contract, web3 } = useWeb3();
 
   const updateBalance = useCallback(async () => {
     const _balance = await contract.methods.getBalance(account).call();
     setBalance(_balance);
   }, [account, contract.methods]);
+
+  useEffect(() => {
+    (async () => {
+      const _balance = await web3.eth.getBalance(account);
+      setEth(web3.utils.fromWei(_balance));
+    })();
+  }, [account, web3.eth, web3.utils]);
 
   useEffect(() => {
     (async () => {
@@ -62,11 +70,12 @@ const AccountCard = ({ account }: props) => {
     <div>
       <ul>
         <li>アカウント名: {account}</li>
-        <li>残高: {balance} eth</li>
+        <li>残高: {balance} coin</li>
+        <li>ethreum wallet 残高: {eth} eth</li>
       </ul>
       <input onChange={changeTargetInput} type="text" />へ
       <input onChange={changeAmountInput} type="number" />
-      ethを
+      coinを
       <input onClick={submitForm} type="submit" value="送金" />
     </div>
   );
