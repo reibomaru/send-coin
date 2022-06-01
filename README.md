@@ -30,3 +30,28 @@ cd <root>/client
 npm install
 npm start
 ```
+## To run the app on Ganache
+1. ### setup ganache
+    1. #### clone ganache 
+    ```
+    git submodule update --init --recursive
+    ```
+    2. #### run ganache
+    ```
+    cd <root>/server/dev/ganache-ui
+    npm install
+    npm run dev
+    ```
+3. ### migrate to ganache
+```
+cd <root>/server
+npm install
+npm run compile
+npm run deploy-ganache
+```
+5. ### run the client server
+```
+cd <root>/client
+npm install
+npm run start-ganache
+```
