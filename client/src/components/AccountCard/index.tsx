@@ -19,12 +19,16 @@ const AccountCard = ({ account }: props) => {
     setBalance(_balance);
   }, [account, contract.methods]);
 
+  const updateEthBalance = useCallback(async () => {
+    const _balance = await web3.eth.getBalance(account);
+    setEth(web3.utils.fromWei(_balance));
+  }, [account, web3.eth, web3.utils]);
+
   useEffect(() => {
     (async () => {
-      const _balance = await web3.eth.getBalance(account);
-      setEth(web3.utils.fromWei(_balance));
+      await updateEthBalance();
     })();
-  }, [account, web3.eth, web3.utils]);
+  }, [updateEthBalance]);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +45,19 @@ const AccountCard = ({ account }: props) => {
         }
       }
     );
-  }, [account, contract.events, contract.methods, updateBalance]);
+    contract.events.Buy(
+      { filter: { _from: account } },
+      async (err: Error, event: any) => {
+        if (err) console.error(err);
+        else {
+          // Print on terminal only when value set is equal to 10
+          console.log(event);
+          await updateEthBalance();
+          await updateBalance();
+        }
+      }
+    );
+  }, [account, contract.events, updateBalance, updateEthBalance]);
 
   const changeTargetInput = useCallback<
     React.ChangeEventHandler<HTMLInputElement>
@@ -66,6 +82,14 @@ const AccountCard = ({ account }: props) => {
     console.log(receipt);
   }, [account, contract.methods, form.amount, form.to]);
 
+  const buyCoin = useCallback(async () => {
+    const receipt = await contract.methods.buyCoin().send({
+      from: account,
+      value: web3.utils.toWei("1", "ether"),
+    });
+    console.log(receipt);
+  }, [account, contract.methods, web3.utils]);
+
   return (
     <div>
       <ul>
@@ -73,10 +97,16 @@ const AccountCard = ({ account }: props) => {
         <li>残高: {balance} coin</li>
         <li>ethreum wallet 残高: {eth} eth</li>
       </ul>
-      <input onChange={changeTargetInput} type="text" />へ
-      <input onChange={changeAmountInput} type="number" />
-      coinを
-      <input onClick={submitForm} type="submit" value="送金" />
+      <div>
+        <input onChange={changeTargetInput} type="text" />へ
+        <input onChange={changeAmountInput} type="number" />
+        coinを
+        <input onClick={submitForm} type="submit" value="送金" />
+      </div>
+      <div>
+        1000coinを
+        <input onClick={buyCoin} type="submit" value="購入" />
+      </div>
     </div>
   );
 };

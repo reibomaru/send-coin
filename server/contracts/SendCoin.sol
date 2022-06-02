@@ -6,6 +6,8 @@ contract SendCoin {
 
     event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
+    event Buy(address indexed _from, uint256 _amount);
+
     constructor() {
         // tx.originってなんだ？
         balances[tx.origin] = 10000;
@@ -20,5 +22,11 @@ contract SendCoin {
 
     function getBalance(address _addr) public view returns (uint256) {
         return balances[_addr];
+    }
+
+    function buyCoin() public payable {
+        require(msg.value == 1 ether);
+        balances[msg.sender] += 1000;
+        emit Buy(msg.sender, 1000);
     }
 }

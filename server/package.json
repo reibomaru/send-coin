@@ -11,7 +11,7 @@
     "start": "truffle develop",
     "format": "prettier --write 'contracts/**/*.sol'",
     "compile": "truffle compile",
-    "deploy-ganache": "truffle migrate --network ganache"
+    "deploy-ganache": "truffle migrate --network ganache --reset"
   },
   "author": "",
   "license": "ISC",
